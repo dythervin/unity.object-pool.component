@@ -1,0 +1,20 @@
+{
+    "name": "Dythervin.ObjectPool.Component",
+    "rootNamespace": "Dythervin.ObjectPool.Component",
+    "references": [
+        "GUID:0d2722be3221441990b3d439a49d3d00",
+        "GUID:f56dc0875763451db016c39dcbb974dd",
+        "GUID:8dc57192e6514b7cbf0e53a25c177905",
+        "GUID:b11a47de063242e48cced591c7538b96",
+        "GUID:0031e864adfd431f8c8176db3609a3cb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
