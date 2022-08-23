@@ -1,6 +1,6 @@
 {
     "name": "Dythervin.ObjectPool.Component.Global",
-    "rootNamespace": "Dythervin.ObjectPool.Component.Global",
+    "rootNamespace": "Dythervin.ObjectPool.Component",
     "references": [
         "GUID:0d2722be3221441990b3d439a49d3d00",
         "GUID:91604c9839ab4f65a1701aa5b8a66b9f",

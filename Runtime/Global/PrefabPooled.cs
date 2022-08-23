@@ -34,19 +34,10 @@ namespace Dythervin.ObjectPool.Component.Global
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            this.TryEnterPlayMode();
+            this.PlayModeSubscribe();
         }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
-        {
-#if UNITY_EDITOR
-            if (value && !EditorUtility.IsPersistent(value))
-            {
-                Debug.Log($"{nameof(value)} must be prefab", value);
-                value = null;
-            }
-#endif
-        }
+        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
 
         public PrefabPooled([NotNull] T prefab)
         {
@@ -54,7 +45,7 @@ namespace Dythervin.ObjectPool.Component.Global
             Init();
         }
 
-        public T GetEditorSafe(Transform parent)
+        public T GetSafe(Transform parent)
         {
 #if UNITY_EDITOR
             if (!ApplicationExt.IsPlaying)

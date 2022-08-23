@@ -113,7 +113,7 @@ namespace Dythervin.ObjectPool.Component
             PrefabId = prefab.GetInstanceID();
             OnDestroy += Destroy;
             _returnToPoolFunc = ReturnToPool;
-            this.TryEnterPlayMode();
+            this.PlayModeSubscribe();
         }
 
         protected ComponentPool()
@@ -202,7 +202,7 @@ namespace Dythervin.ObjectPool.Component
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            this.TryEnterPlayMode();
+            this.PlayModeSubscribe();
         }
 
         protected virtual void OnEnterPlayMode()
