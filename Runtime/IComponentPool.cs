@@ -9,9 +9,9 @@ namespace Dythervin.ObjectPool.Component
     {
         T Get(Transform parent, bool setActive = true);
         T Get(bool setActive = true);
-        T Get(in Vector3 position, in Quaternion rotation, bool setActive = true);
-        T Get(in Vector3 position, in Quaternion rotation, Transform parent, bool setActive = true);
-        T Get(in Vector3 position, bool setActive = true);
-        T Get(in Vector3 position, in Transform parent, bool setActive = true);
+        T Get(in Vector3 position, in Quaternion rotation, bool setActive = true, Space space = Space.World);
+        T Get(in Vector3 position, in Quaternion rotation, Transform parent, bool setActive = true, Space space = Space.World);
+        T Get(in Vector3 position, bool setActive = true, Space space = Space.World);
+        T Get(in Vector3 position, in Transform parent, bool setActive = true, Space space = Space.World);
     }
 }

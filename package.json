@@ -1,6 +1,6 @@
 {
   "name": "com.dythervin.unity.object-pool.component",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "unity": "2020.3",
   "unityRelease": "0f1",
   "keywords": [],
@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "com.dythervin.unity.core": "1.0.1",
-    "com.dythervin.unity.updater": "1.0.0",
-    "com.dythervin.unity.callbacks": "1.0.0",
+    "com.dythervin.unity.updater": "1.0.1",
+    "com.dythervin.unity.callbacks": "1.0.1",
     "com.dythervin.unity.object-pool": "1.0.1"
   },
   "displayName": "component-pool"

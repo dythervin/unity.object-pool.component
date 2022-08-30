@@ -1,5 +1,7 @@
 ﻿using Dythervin.Core;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Dythervin.ObjectPool.Component.Global
 {
@@ -29,30 +31,29 @@ namespace Dythervin.ObjectPool.Component.Global
             return TryGetPool(original, out var pool) ? pool.Get(parent) : Object.Instantiate(original, parent, false);
         }
 
-        public static void ReleaseOrDestroy<T>(T obj)
-            where T : UnityEngine.Component
+        public static void ReleaseOrDestroy([NotNull] GameObject obj)
         {
-            if (GlobalPools<T>.PoolObjToPrefab.ContainsKey(obj.GetInstanceID()))
+            Assert.IsNotNull(obj);
+            if (PoolObjToPrefab.ContainsKey(obj.GetInstanceID()))
             {
-                obj.gameObject.SetActive(false);
+                obj.SetActive(false);
             }
             else
             {
 #if UNITY_EDITOR
                 if (!ApplicationExt.IsPlaying)
                 {
-                    Object.DestroyImmediate(obj.gameObject);
+                    Object.DestroyImmediate(obj);
                     return;
                 }
 #endif
-                Object.Destroy(obj.gameObject);
+                Object.Destroy(obj);
             }
         }
-
-        public static void DisabledAndDestroy(GameObject obj)
+        public static void ReleaseOrDestroy<T>([NotNull] T obj)
+            where T : UnityEngine.Component
         {
-            obj.SetActive(false);
-            DelayedDestroyer.Instance.Destroy(obj, 3);
+            ReleaseOrDestroy(obj.gameObject);
         }
     }
 }

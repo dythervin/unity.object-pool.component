@@ -7,11 +7,11 @@ namespace Dythervin.ObjectPool.Component.Global
         where T : UnityEngine.Component
     {
         internal static readonly Dictionary<int, WeakReferenceT<IComponentPool<T>>> Pools = new Dictionary<int, WeakReferenceT<IComponentPool<T>>>();
-        internal static readonly Dictionary<int, int> PoolObjToPrefab = new Dictionary<int, int>();
     }
 
     public static partial class GlobalPools
     {
+        private static readonly Dictionary<int, int> PoolObjToPrefab = new Dictionary<int, int>(1024);
         public static bool TryGetPool<T>(int prefabId, out IComponentPool<T> pool)
             where T : UnityEngine.Component
         {
@@ -60,8 +60,8 @@ namespace Dythervin.ObjectPool.Component.Global
             where T : UnityEngine.Component
         {
             var pool = new GlobalComponentPool<T>(prefabPooled.Prefab, collectionCheckDefault: false);
-            pool.OnInstantiated += (componentPool, component) => GlobalPools<T>.PoolObjToPrefab.Add(component.GetInstanceID(), componentPool.PrefabId);
-            pool.OnDestroyed += (componentPool, component) => GlobalPools<T>.PoolObjToPrefab.Remove(component.GetInstanceID());
+            pool.OnInstantiated += (componentPool, component) => PoolObjToPrefab.Add(component.gameObject.GetInstanceID(), componentPool.PrefabId);
+            pool.OnDestroyed += (componentPool, component) => PoolObjToPrefab.Remove(component.gameObject.GetInstanceID());
             return pool;
         }
     }

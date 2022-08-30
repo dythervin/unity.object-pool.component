@@ -73,34 +73,58 @@ namespace Dythervin.ObjectPool.Component
             return obj;
         }
 
-        public T Get(in Vector3 position, in Quaternion rotation, bool setActive = true)
+        public T Get(in Vector3 position, in Quaternion rotation, bool setActive = true, Space space = Space.World)
         {
             T obj = Get(setActive);
-            obj.transform.SetPositionAndRotation(position, rotation);
+            if (space == Space.World)
+            {
+                obj.transform.SetPositionAndRotation(position, rotation);
+            }
+            else
+            {
+                obj.transform.localRotation = rotation;
+                obj.transform.localPosition = position;
+            }
+
             return obj;
         }
 
-        public T Get(in Vector3 position, in Quaternion rotation, Transform parent, bool setActive = true)
+        public T Get(in Vector3 position, in Quaternion rotation, Transform parent, bool setActive = true, Space space = Space.World)
+        {
+            T obj = Get(parent, setActive);
+            obj.transform.SetParent(parent, true);
+            if (space == Space.World)
+            {
+                obj.transform.SetPositionAndRotation(position, rotation);
+            }
+            else
+            {
+                obj.transform.localRotation = rotation;
+                obj.transform.localPosition = position;
+            }
+
+            return obj;
+        }
+
+
+        public T Get(in Vector3 position, bool setActive = true, Space space = Space.World)
+        {
+            T obj = Get(setActive);
+            if (space == Space.World)
+                obj.transform.position = position;
+            else
+                obj.transform.localPosition = position;
+            return obj;
+        }
+
+        public T Get(in Vector3 position, in Transform parent, bool setActive = true, Space space = Space.World)
         {
             T obj = Get(parent, setActive);
             obj.transform.SetParent(parent);
-            obj.transform.SetPositionAndRotation(position, rotation);
-            return obj;
-        }
-
-
-        public T Get(in Vector3 position, bool setActive = true)
-        {
-            T obj = Get(setActive);
-            obj.transform.position = position;
-            return obj;
-        }
-
-        public T Get(in Vector3 position, in Transform parent, bool setActive = true)
-        {
-            T obj = Get(parent, setActive);
-            obj.transform.SetParent(parent);
-            obj.transform.position = position;
+            if (space == Space.World)
+                obj.transform.position = position;
+            else
+                obj.transform.localPosition = position;
             return obj;
         }
 
