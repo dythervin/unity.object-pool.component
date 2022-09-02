@@ -37,14 +37,10 @@ namespace Dythervin.ObjectPool.Component.Global
             IComponentPool<T> pool;
             if (GlobalPools<T>.Pools.TryGetValue(prefabPooled.instanceId, out var weakPTr))
             {
-                if (!weakPTr.IsAlive)
+                if (!weakPTr.TryGetTarget(out pool))
                 {
                     pool = CreatePool(prefabPooled);
                     weakPTr.Target = pool;
-                }
-                else
-                {
-                    pool = weakPTr.Target;
                 }
             }
             else

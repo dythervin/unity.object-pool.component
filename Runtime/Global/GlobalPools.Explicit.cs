@@ -22,7 +22,7 @@ namespace Dythervin.ObjectPool.Component.Global
         public static T InstantiatePooled<T>(T original, Vector3 position, Quaternion rotation, Transform parent)
             where T : UnityEngine.Component
         {
-            return TryGetPool(original, out var pool) ? pool.Get(position, rotation, parent) : Object.Instantiate(original, position, rotation, parent);
+            return TryGetPool(original, out var pool) ? pool.Get(parent, position, rotation) : Object.Instantiate(original, position, rotation, parent);
         }
 
         public static T InstantiatePooled<T>(T original, Transform parent)

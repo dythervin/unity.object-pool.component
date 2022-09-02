@@ -4,6 +4,7 @@ using Dythervin.Core;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Scripting;
 #if UNITY_EDITOR && ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #endif
@@ -32,6 +33,7 @@ namespace Dythervin.ObjectPool.Component.Global
             Init();
         }
 
+        [Preserve]
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
             this.PlayModeSubscribe();

@@ -29,14 +29,22 @@ namespace Dythervin.ObjectPool.Component
         private readonly Action<ICallbacks> _returnToPoolFunc;
 
 #if ODIN_INSPECTOR
-        [HideInEditorMode] [ShowInInspector] [ReadOnly]
+        [HideInEditorMode]
+        [ShowInInspector]
+        [ReadOnly]
 #endif
         private int _instanced;
 
+        private int _instantiated;
+
 #if ODIN_INSPECTOR
-        [HideInEditorMode] [ShowInInspector] [ReadOnly]
+        [HideInEditorMode]
+        [ShowInInspector]
+        [ReadOnly]
 #endif
         private int _pooled;
+
+        private IComponentPool<T> _componentPoolImplementation;
 
         [field: SerializeField] public T Prefab { get; private set; }
         [field: SerializeField] public Transform Parent { get; private set; }
@@ -65,31 +73,25 @@ namespace Dythervin.ObjectPool.Component
                 PoolHelper.Instance.Remove(obj.transform);
 
                 OnGot(obj);
+                _instanced++;
                 return obj;
             }
 
             obj = CreateObj(setActive);
             OnGot(obj);
+            _instanced++;
             return obj;
         }
 
-        public T Get(in Vector3 position, in Quaternion rotation, bool setActive = true, Space space = Space.World)
+        public T Get(in Vector3 position, in Quaternion rotation, bool setActive = true)
         {
             T obj = Get(setActive);
-            if (space == Space.World)
-            {
-                obj.transform.SetPositionAndRotation(position, rotation);
-            }
-            else
-            {
-                obj.transform.localRotation = rotation;
-                obj.transform.localPosition = position;
-            }
-
+            obj.transform.localRotation = rotation;
+            obj.transform.localPosition = position;
             return obj;
         }
 
-        public T Get(in Vector3 position, in Quaternion rotation, Transform parent, bool setActive = true, Space space = Space.World)
+        public T Get(Transform parent, in Vector3 position, in Quaternion rotation, bool setActive = true, Space space = Space.World)
         {
             T obj = Get(parent, setActive);
             obj.transform.SetParent(parent, true);
@@ -107,17 +109,14 @@ namespace Dythervin.ObjectPool.Component
         }
 
 
-        public T Get(in Vector3 position, bool setActive = true, Space space = Space.World)
+        public T Get(in Vector3 position, bool setActive = true)
         {
             T obj = Get(setActive);
-            if (space == Space.World)
-                obj.transform.position = position;
-            else
-                obj.transform.localPosition = position;
+            obj.transform.localPosition = position;
             return obj;
         }
 
-        public T Get(in Vector3 position, in Transform parent, bool setActive = true, Space space = Space.World)
+        public T Get(Transform parent, in Vector3 position, bool setActive = true, Space space = Space.World)
         {
             T obj = Get(parent, setActive);
             obj.transform.SetParent(parent);
@@ -184,6 +183,10 @@ namespace Dythervin.ObjectPool.Component
         {
             Assertions.AssertPlayMode();
             T obj = Object.Instantiate(Prefab, Parent);
+#if UNITY_EDITOR
+            obj.name = obj.name.Replace("(Clone)", $" - {_instantiated.ToString()}");
+#endif
+            _instantiated++;
             AddToPool(obj);
             return obj;
         }
