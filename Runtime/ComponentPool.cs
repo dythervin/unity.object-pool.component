@@ -91,7 +91,7 @@ namespace Dythervin.ObjectPool.Component
             return obj;
         }
 
-        public T Get(Transform parent, in Vector3 position, in Quaternion rotation, bool setActive = true, Space space = Space.World)
+        public T Get(Transform parent, in Vector3 position, in Quaternion rotation, Space space = Space.World, bool setActive = true)
         {
             T obj = Get(parent, setActive);
             obj.transform.SetParent(parent, true);
@@ -116,7 +116,7 @@ namespace Dythervin.ObjectPool.Component
             return obj;
         }
 
-        public T Get(Transform parent, in Vector3 position, bool setActive = true, Space space = Space.World)
+        public T Get(Transform parent, in Vector3 position, Space space = Space.World, bool setActive = true)
         {
             T obj = Get(parent, setActive);
             obj.transform.SetParent(parent);
