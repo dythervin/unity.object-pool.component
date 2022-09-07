@@ -135,7 +135,6 @@ namespace Dythervin.ObjectPool.Component
         {
             OnlyPoolCanDestroyObj = onlyPoolCanDestroyObj;
             Prefab = prefab;
-            _defaultScale = prefab.transform.lossyScale;
             PrefabId = prefab.GetInstanceID();
             OnDestroy += Destroy;
             _returnToPoolFunc = ReturnToPool;
