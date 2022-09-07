@@ -44,6 +44,8 @@ namespace Dythervin.ObjectPool.Component
 #endif
         private int _pooled;
 
+        private Vector3 _defaultScale;
+
         private IComponentPool<T> _componentPoolImplementation;
 
         [field: SerializeField] public T Prefab { get; private set; }
@@ -133,6 +135,7 @@ namespace Dythervin.ObjectPool.Component
         {
             OnlyPoolCanDestroyObj = onlyPoolCanDestroyObj;
             Prefab = prefab;
+            _defaultScale = prefab.transform.lossyScale;
             PrefabId = prefab.GetInstanceID();
             OnDestroy += Destroy;
             _returnToPoolFunc = ReturnToPool;
@@ -161,7 +164,8 @@ namespace Dythervin.ObjectPool.Component
                 obj.gameObject.SetActive(false);
 
             //obj.transform.SetParent(Parent);
-            PoolHelper.Instance.Add(obj.transform, Parent);
+            PoolHelper.Instance.Add(obj.transform, Parent, _defaultScale);
+            obj.transform.localScale = Prefab.transform.localScale;
 
             Stack.Push(obj);
             _instanced--;
@@ -238,6 +242,7 @@ namespace Dythervin.ObjectPool.Component
                 return;
 
             PrefabId = Prefab.GetInstanceID();
+            _defaultScale = Prefab.transform.lossyScale;
             Parent = new GameObject($"{typeof(T).Name} pool")
             {
                 isStatic = true,

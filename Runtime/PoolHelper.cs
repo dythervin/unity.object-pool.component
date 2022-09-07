@@ -7,25 +7,29 @@ namespace Dythervin.ObjectPool.Component
 {
     public class PoolHelper : Singleton<PoolHelper>, IUpdatable
     {
-        private readonly Dictionary<Transform, Transform> objectToParents = new Dictionary<Transform, Transform>();
+        private readonly Dictionary<Transform, (Transform parent, Vector3 scale)> _objectToParents =
+            new Dictionary<Transform, (Transform parent, Vector3 scale)>();
 
-        public void Add(Transform component, Transform parent)
+        public void Add(Transform component, Transform parent, in Vector3 defaultScale)
         {
-            objectToParents.Add(component, parent);
+            _objectToParents.Add(component, (parent, defaultScale));
             this.SetUpdater(true);
         }
 
         public void Remove(Transform component)
         {
-            objectToParents.Remove(component);
+            _objectToParents.Remove(component);
         }
 
         void IUpdatable.OnUpdate()
         {
-            foreach (var pair in objectToParents)
-                pair.Key.SetParent(pair.Value);
+            foreach (var pair in _objectToParents)
+            {
+                pair.Key.SetParent(pair.Value.parent);
+                pair.Key.localScale = pair.Value.scale;
+            }
 
-            objectToParents.Clear();
+            _objectToParents.Clear();
             this.SetUpdater(false);
         }
     }
