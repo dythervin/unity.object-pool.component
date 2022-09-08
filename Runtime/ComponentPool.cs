@@ -243,7 +243,7 @@ namespace Dythervin.ObjectPool.Component
                 return;
 
             PrefabId = Prefab.GetInstanceID();
-            _defaultScale = Prefab.transform.lossyScale;
+            _defaultScale = Prefab.transform.localScale;
             Parent = new GameObject($"{typeof(T).Name} pool")
             {
                 isStatic = true,
