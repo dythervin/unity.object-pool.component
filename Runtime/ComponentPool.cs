@@ -217,7 +217,16 @@ namespace Dythervin.ObjectPool.Component
         protected virtual void OnEnterPlayMode()
         {
             PrefabId = Prefab.GetInstanceID();
-            _defaultScale = Prefab.transform.localScale;
+            try
+            {
+                _defaultScale = Prefab.transform.localScale;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                _defaultScale = Vector3.one;
+            }
+
             SetParent();
         }
 
