@@ -27,8 +27,6 @@ namespace Dythervin.ObjectPool.Component
 
         private readonly Action<ICallbacks> _returnToPoolFunc;
 
-        private Vector3 _defaultScale;
-
 #if ODIN_INSPECTOR
         [HideInEditorMode]
         [ShowInInspector]
@@ -166,12 +164,29 @@ namespace Dythervin.ObjectPool.Component
                 obj.gameObject.SetActive(false);
 
             //obj.transform.SetParent(Parent);
-            PoolHelper.Instance.Add(obj.transform, Parent, _defaultScale);
+
+            PoolHelper.Instance.Add(obj.transform, Parent, PrefabScale);
             obj.transform.localScale = Prefab.transform.localScale;
 
             Stack.Push(obj);
             _instanced--;
             _pooled++;
+        }
+
+        private Vector3 PrefabScale
+        {
+            get
+            {
+                try
+                {
+                    return Prefab.transform.localScale;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"ComponentPool OnEnterPlayMode: {e}");
+                    return Vector3.one;
+                }
+            }
         }
 
         public void AddToPool(T obj)
@@ -217,16 +232,6 @@ namespace Dythervin.ObjectPool.Component
         protected virtual void OnEnterPlayMode()
         {
             PrefabId = Prefab.GetInstanceID();
-            try
-            {
-                _defaultScale = Prefab.transform.localScale;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-                _defaultScale = Vector3.one;
-            }
-
             SetParent();
         }
 
@@ -240,27 +245,21 @@ namespace Dythervin.ObjectPool.Component
             Object.Destroy(obj);
         }
 
+
         private void SetParent()
         {
             if (Parent)
                 return;
 
-            Parent = new GameObject($"{typeof(T).Name} pool")
+            var go = new GameObject($"{typeof(T).Name} pool")
             {
                 isStatic = true,
 #if UNITY_EDITOR
                 hideFlags = HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor
 #endif
-            }.transform;
-
-            try
-            {
-                Parent.parent = PersistentRoot.Get("ObjectPools").transform;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
+            };
+            Parent = go.transform;
+            Parent.parent = Application.isEditor ? PersistentRoot.Get("ObjectPools").transform : PersistentRoot.Transform;
         }
 
         ~ComponentPool()
