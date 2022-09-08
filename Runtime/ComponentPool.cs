@@ -8,6 +8,7 @@ using Dythervin.Core;
 using Dythervin.Core.Extensions;
 using Dythervin.Core.Utils;
 using Dythervin.Updaters.Main;
+using ICSharpCode.NRefactory.Visitors;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -239,11 +240,17 @@ namespace Dythervin.ObjectPool.Component
 
         protected virtual void OnEnterPlayMode()
         {
-            if (Parent)
-                return;
-
             PrefabId = Prefab.GetInstanceID();
             _defaultScale = Prefab.transform.localScale;
+
+            SetParent();
+        }
+
+        private void SetParent()
+        {
+            if (Parent)
+                return;
+            
             Parent = new GameObject($"{typeof(T).Name} pool")
             {
                 isStatic = true,
