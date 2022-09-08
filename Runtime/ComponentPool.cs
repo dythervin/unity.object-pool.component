@@ -248,9 +248,19 @@ namespace Dythervin.ObjectPool.Component
             Parent = new GameObject($"{typeof(T).Name} pool")
             {
                 isStatic = true,
-                transform = { parent = PersistentRoot.Get("ObjectPools").transform },
+#if UNITY_EDITOR
                 hideFlags = HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor
+#endif
             }.transform;
+
+            try
+            {
+                Parent.parent = PersistentRoot.Get("ObjectPools").transform;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         ~ComponentPool()
