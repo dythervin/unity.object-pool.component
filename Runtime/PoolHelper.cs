@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Dythervin.Core.Utils;
-using Dythervin.Updater;
+using Dythervin.Updaters;
 using UnityEngine;
 
 namespace Dythervin.ObjectPool.Component

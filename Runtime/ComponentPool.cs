@@ -7,6 +7,7 @@ using Dythervin.Callbacks;
 using Dythervin.Core;
 using Dythervin.Core.Extensions;
 using Dythervin.Core.Utils;
+using Dythervin.Updaters.Main;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -45,8 +46,6 @@ namespace Dythervin.ObjectPool.Component
         private int _pooled;
 
         private Vector3 _defaultScale;
-
-        private IComponentPool<T> _componentPoolImplementation;
 
         [field: SerializeField] public T Prefab { get; private set; }
         [field: SerializeField] public Transform Parent { get; private set; }
@@ -135,7 +134,6 @@ namespace Dythervin.ObjectPool.Component
         {
             OnlyPoolCanDestroyObj = onlyPoolCanDestroyObj;
             Prefab = prefab;
-            PrefabId = prefab.GetInstanceID();
             OnDestroy += Destroy;
             _returnToPoolFunc = ReturnToPool;
             this.PlayModeSubscribe();
@@ -148,9 +146,13 @@ namespace Dythervin.ObjectPool.Component
 
         ~ComponentPool()
         {
-            if (!Application.isPlaying || ApplicationExt.IsQuitting)
+            if (!ApplicationExt.IsPlaying || ApplicationExt.IsQuitting)
                 return;
-            Clear();
+
+            if (ThreadExt.IsMain)
+                Clear();
+            else
+                Updater.Instance.OnUpdateOnce += Clear;
         }
 
         public void ReturnToPool(ICallbacks callbacks)

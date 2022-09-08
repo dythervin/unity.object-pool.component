@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "com.dythervin.unity.core": "1.0.1",
-    "com.dythervin.unity.updater": "1.0.1",
+    "com.dythervin.unity.updaters": "1.0.1",
     "com.dythervin.unity.callbacks": "1.0.1",
     "com.dythervin.unity.object-pool": "1.0.1"
   },
