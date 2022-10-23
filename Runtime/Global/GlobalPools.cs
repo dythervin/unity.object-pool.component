@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Dythervin.Core.Utils;
+using UnityEngine;
 
 namespace Dythervin.ObjectPool.Component.Global
 {
@@ -11,7 +12,7 @@ namespace Dythervin.ObjectPool.Component.Global
 
     public static partial class GlobalPools
     {
-        private static readonly Dictionary<int, int> PoolObjToPrefab = new Dictionary<int, int>(1024);
+        private static readonly Dictionary<Object, Object> PoolObjToPrefab = new Dictionary<Object, Object>(1024);
         public static bool TryGetPool<T>(int prefabId, out IComponentPool<T> pool)
             where T : UnityEngine.Component
         {
@@ -56,8 +57,8 @@ namespace Dythervin.ObjectPool.Component.Global
             where T : UnityEngine.Component
         {
             var pool = new GlobalComponentPool<T>(prefabPooled.Prefab, collectionCheckDefault: false);
-            pool.OnInstantiated += (componentPool, component) => PoolObjToPrefab.Add(component.gameObject.GetInstanceID(), componentPool.PrefabId);
-            pool.OnDestroyed += (componentPool, component) => PoolObjToPrefab.Remove(component.gameObject.GetInstanceID());
+            pool.OnInstantiated += (componentPool, component) => PoolObjToPrefab.Add(component, componentPool.Prefab);
+            pool.OnDestroyed += (componentPool, component) => PoolObjToPrefab.Remove(component);
             return pool;
         }
     }

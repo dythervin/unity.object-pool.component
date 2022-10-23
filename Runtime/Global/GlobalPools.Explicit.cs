@@ -34,7 +34,7 @@ namespace Dythervin.ObjectPool.Component.Global
         public static void ReleaseOrDestroy([NotNull] GameObject obj)
         {
             Assert.IsNotNull(obj);
-            if (PoolObjToPrefab.ContainsKey(obj.GetInstanceID()))
+            if (PoolObjToPrefab.ContainsKey(obj))
             {
                 obj.SetActive(false);
             }

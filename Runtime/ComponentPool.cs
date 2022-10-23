@@ -4,7 +4,7 @@ using Dythervin.Callbacks;
 using Dythervin.Core;
 using Dythervin.Core.Extensions;
 using Dythervin.Core.Utils;
-using Dythervin.Updaters.Main;
+using Dythervin.UpdateSystem.Main;
 using UnityEngine;
 using Object = UnityEngine.Object;
 #if ODIN_INSPECTOR
